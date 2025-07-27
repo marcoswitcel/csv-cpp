@@ -25,6 +25,23 @@ int main(int argc, const char* argv[])
     std::cout << "Success!" << std::endl;
     std::cout << "Header Size: " << csv.header.size() << std::endl;
     std::cout << "Dataset Size: " << csv.dataset.size() << std::endl;
+
+    // header
+    for (const auto &dataField : csv.header)
+    {
+      std::cout << dataField << "||";
+    }
+    std::cout << std::endl;
+
+    // data
+    for (const auto &row : csv.dataset)
+    {
+      for (const auto &dataField : row)
+      {
+        std::cout << dataField << "||";
+      }
+      std::cout << std::endl;
+    }
   }
   else
   {
