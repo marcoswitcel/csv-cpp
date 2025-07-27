@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,9 +19,13 @@ struct CSVData
 
 bool add_data_row(CSV_Data_Row &row, std::string line)
 {
-  // @todo João, terminar isso aqui, precisa fazer o split o mínimo...
-  // depois definir os tipos de dados...
-  row.push_back(line);
+  std::stringstream stream(line);
+  std::string field;
+  // @todo João, terminar isso aqui, definir os tipos de dados...
+  while (std::getline(stream, field, ','))
+  {
+    row.push_back(field);
+  }
 }
 
 // @todo João, terminar isso aqui
@@ -46,6 +51,8 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
     {
       CSV_Data_Row row;
       add_data_row(row, line);
+
+      assert(row.size() == csv.header.size());
       csv.dataset.push_back(row);
     }
   }
