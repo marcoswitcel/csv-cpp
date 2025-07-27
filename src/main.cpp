@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 #include "./csv.cpp"
 
@@ -26,12 +27,26 @@ int main(int argc, const char* argv[])
     std::cout << "Header Size: " << csv.header.size() << std::endl;
     std::cout << "Dataset Size: " << csv.dataset.size() << std::endl;
 
+    // @note apenas para testes...
+    std::vector<std::string> filters;
+    filters.push_back("score");
+    std::vector<size_t> filters_index;
+
     // header
     for (const auto &dataField : csv.header)
     {
       std::cout << dataField << "||";
     }
     std::cout << std::endl;
+
+    for (const auto &filter: filters)
+    {
+      auto it = std::find(filters.begin(), filters.end(), filter);
+      if (it != filters.end())
+      {
+        filters_index.push_back(std::distance(filters.begin(), it));
+      }
+    }
 
     // data
     for (const auto &row : csv.dataset)
