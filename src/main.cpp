@@ -51,8 +51,12 @@ int main(int argc, const char* argv[])
     // data
     for (const auto &row : csv.dataset)
     {
-      for (const auto &dataField : row)
+      for (size_t i = 0; i < row.size(); i++)
       {
+        // @todo João, terminar filtro aqui...
+        // if (std::find(filters_index.begin(), filters_index.end(), i) != filters_index.end()) continue;
+
+        const auto &dataField = row[i];
         std::cout << dataField << "||";
       }
       std::cout << std::endl;
