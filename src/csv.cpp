@@ -19,24 +19,22 @@ struct CSVData
 
 void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 {
-
-  std::vector<size_t> filters_index;
+  std::vector<size_t> index_to_show;
   const auto &header = csv.header;
 
-  for (const auto &filter: filters)
+  for (size_t i = 0; i < header.size(); i++)
   {
-    auto it = std::find(header.begin(), header.end(), filter);
-    if (it != header.end())
-    {
-      filters_index.push_back(std::distance(header.begin(), it));
-    }
+    const auto &dataField = header[i];
+    auto it = std::find(filters.begin(), filters.end(), dataField);
+    
+    if (it != filters.end()) continue;
+
+    index_to_show.push_back(i);
   }
 
   // header
-  for (size_t i = 0; i < header.size(); i++)
+  for (const auto i : index_to_show)
   {
-    if (std::find(filters_index.begin(), filters_index.end(), i) != filters_index.end()) continue;
-
     const auto &dataField = header[i];
     std::cout << dataField << "||";
   }
@@ -45,10 +43,8 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
   // data
   for (const auto &row : csv.dataset)
   {
-    for (size_t i = 0; i < row.size(); i++)
+    for (const auto i : index_to_show)
     {
-      if (std::find(filters_index.begin(), filters_index.end(), i) != filters_index.end()) continue;
-
       const auto &dataField = row[i];
       std::cout << dataField << "||";
     }
