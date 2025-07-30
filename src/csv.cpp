@@ -17,6 +17,42 @@ struct CSVData
   std::vector<CSV_Data_Row> dataset;
 };
 
+void print_as_table(CSVData &csv, std::vector<std::string> &filters)
+{
+
+  std::vector<size_t> filters_index;
+
+  // header
+  for (const auto &dataField : csv.header)
+  {
+    std::cout << dataField << "||";
+  }
+  std::cout << std::endl;
+
+  for (const auto &filter: filters)
+  {
+    auto it = std::find(filters.begin(), filters.end(), filter);
+    if (it != filters.end())
+    {
+      filters_index.push_back(std::distance(filters.begin(), it));
+    }
+  }
+
+  // data
+  for (const auto &row : csv.dataset)
+  {
+    for (size_t i = 0; i < row.size(); i++)
+    {
+      // @todo João, terminar filtro aqui...
+      // if (std::find(filters_index.begin(), filters_index.end(), i) != filters_index.end()) continue;
+
+      const auto &dataField = row[i];
+      std::cout << dataField << "||";
+    }
+    std::cout << std::endl;
+  }
+}
+
 void add_data_row(CSV_Data_Row &row, std::string line)
 {
   std::stringstream stream(line);
