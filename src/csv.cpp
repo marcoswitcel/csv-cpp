@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <iomanip>
 
 // @note João, considerar usar cstrings e array estáticos para o header e as linhas
 using CSV_Data_Row = std::vector<std::string>;
@@ -17,39 +18,62 @@ struct CSVData
   std::vector<CSV_Data_Row> dataset;
 };
 
+
+/**
+ * @brief função que printa os dados em formato de tabela
+ * 
+ * @todo João, otimizar e ou escapar caracteres especiais para não quebrar o layout, bem como
+ * calcular tamanho de colunas de forma dinâmica e escrever para um arquivo ao invés do 'std::cout'
+ * 
+ * @param csv 
+ * @param filters colunas que não devem ser exibidas
+ */
 void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 {
   std::vector<size_t> index_to_show;
   const auto &header = csv.header;
+  size_t field_width = 0;
 
   for (size_t i = 0; i < header.size(); i++)
   {
     const auto &dataField = header[i];
     auto it = std::find(filters.begin(), filters.end(), dataField);
+
+    field_width = field_width > dataField.size() ? field_width : dataField.size();
     
     if (it != filters.end()) continue;
 
     index_to_show.push_back(i);
   }
 
+  field_width += 3; // padding arbitrário
+
+  if (index_to_show.size() == 0) return;
+
   // header
+  std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
+  std::cout << "|";
   for (const auto i : index_to_show)
   {
     const auto &dataField = header[i];
-    std::cout << dataField << "||";
+    std::cout << std::left << std::setfill(' ') << std::setw(field_width) << dataField << "|";
   }
   std::cout << std::endl;
+  std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
 
   // data
   for (const auto &row : csv.dataset)
   {
+    std::cout << "|";
     for (const auto i : index_to_show)
     {
       const auto &dataField = row[i];
-      std::cout << dataField << "||";
+      std::cout << std::left << std::setfill(' ') << std::setw(field_width) << dataField << "|";
     }
     std::cout << std::endl;
+    std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
   }
+
 }
 
 void add_data_row(CSV_Data_Row &row, std::string line)

@@ -29,7 +29,7 @@ int main(int argc, const char* argv[])
 
 
     std::vector<std::string> filters;
-    filters.push_back("score");
+    // filters.push_back("score");
 
     print_as_table(csv, filters);
     
