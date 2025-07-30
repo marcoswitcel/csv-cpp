@@ -14,6 +14,9 @@ using CSV_Data_Row = std::vector<std::string>;
 
 struct CSVData
 {
+  // @todo João, modelar uma coluna dedicada a metadados sobre o parsing e os tipos inferidos
+  // das colunas. Armazenar se houve algum erro em alguma linha e talvez traquear as linhas problemáticas
+  // para remoção ou tratamento
   CSV_Data_Row header;
   std::vector<CSV_Data_Row> dataset;
 };
@@ -80,7 +83,8 @@ void add_data_row(CSV_Data_Row &row, std::string line)
 {
   std::stringstream stream(line);
   std::string field;
-  // @todo João, terminar isso aqui, definir os tipos de dados...
+  // @todo João, aqui na verdade será necessário ajustar para parsear as linhas
+  // tanto pela questão das colunas com àspas como pelos possíveis enteres dentro dessas colunas
   while (std::getline(stream, field, ','))
   {
     row.push_back(field);
