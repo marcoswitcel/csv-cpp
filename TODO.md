@@ -10,3 +10,6 @@ Desenvolver código necessário para 'manipular' arquivos CSV, ler, escrever e m
 * * Formatar
 * * Checar por erros
 * * Filtrar colunas e ou linhas
+* * Apresentar dados de forma tabela no console
+* * Montar metadados do arquivo (colunas com valores nulos ou não)
+* * Implementar funcionalidade para promover os colunas para tipos mais específicos
