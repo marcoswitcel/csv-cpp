@@ -17,7 +17,7 @@ struct CSVData
   std::vector<CSV_Data_Row> dataset;
 };
 
-bool add_data_row(CSV_Data_Row &row, std::string line)
+void add_data_row(CSV_Data_Row &row, std::string line)
 {
   std::stringstream stream(line);
   std::string field;
