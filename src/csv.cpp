@@ -125,7 +125,12 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
       CSV_Data_Row row;
       add_data_row(row, line);
 
-      assert(row.size() == csv.header.size());
+      // @todo João, ver como vai evoluir esses warns
+      if (row.size() != csv.header.size())
+      {
+        std::cout << "WARN: data_row com número de colunas incompatível com cabeçalho. colunas: "
+                  << row.size() << ", linha índice: " << csv.dataset.size() << std::endl;
+      }
       csv.dataset.push_back(row);
     }
   }
