@@ -11,7 +11,7 @@ SAMPLE_FOLDER_NAME=samples
 TESTS_FOLDER_NAME=tests
 BUILD_FOLDER_NAME=target
 
-RUN_ARGS=./samples/foods.csv
+RUN_ARGS=./samples/books.csv
 
 build-folder-setup:
 	@ mkdir -p $(BUILD_FOLDER_NAME)
