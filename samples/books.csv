@@ -1,5 +1,5 @@
-nome,descrição
-Sherlock Holmes,ótimo livro
-Batman: vol 14,"ótima história"
-Livro genérico,"Descrição, com vírgula"
-"Memórias Póstumas de Brás Cubas","Clássico da literatura brasileira"
+nome,descrição,pontos
+Sherlock Holmes,ótimo livro,10
+Batman: vol 14,"ótima história",10
+Livro genérico,"Descrição, com vírgula",10
+"Memórias Póstumas de Brás Cubas","Clássico da literatura brasileira",10
