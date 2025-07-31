@@ -125,6 +125,7 @@ std::vector<std::string> parsing_data_cells(std::string source)
   std::vector<std::string> data;
   CSV_Parse_Context parser(source);
   int64_t start_current_data_cell = parser.index;
+  bool quoted = false;
   
   while (!parser.is_finished())
   {
@@ -134,9 +135,16 @@ std::vector<std::string> parsing_data_cells(std::string source)
     // @todo João, por hora funcionou, mas falta considerar strings com aspas e remover as aspas do output
     // @todo João, também ignorar delimitadores dentro de strings com aspas
     // @todo João, também ignorar aspas seguidas de aspas, checar na RFC do CSV
-    if (character == delimiter || parser.is_finished())
+    // @wip vários bugs... terminar
+    if (character == '"')
     {
-      std::string data_cell = parser.source.substr(start_current_data_cell, parser.index - 1);
+      character = parser.eat_char();
+      quoted = !quoted;
+    }
+
+    if (!quoted && (character == delimiter || parser.is_finished()))
+    {
+      std::string data_cell = parser.source.substr(start_current_data_cell, parser.index - start_current_data_cell);
       data.push_back(data_cell);
       start_current_data_cell = parser.index;
     }
