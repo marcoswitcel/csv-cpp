@@ -42,14 +42,23 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
     const auto &dataField = header[i];
     auto it = std::find(filters.begin(), filters.end(), dataField);
 
-    field_width = field_width > dataField.size() ? field_width : dataField.size();
-    
     if (it != filters.end()) continue;
+
+    field_width = field_width > dataField.size() ? field_width : dataField.size();
 
     index_to_show.push_back(i);
   }
 
-  field_width += 3; // padding arbitrário
+  for (const auto &row : csv.dataset)
+  {
+    for (const auto i : index_to_show)
+    {
+      const auto &dataField = row[i];
+      field_width = field_width > dataField.size() ? field_width : dataField.size();
+    }
+  }
+
+  field_width += 4; // padding arbitrário
 
   if (index_to_show.size() == 0) return;
 
