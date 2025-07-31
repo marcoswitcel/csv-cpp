@@ -21,6 +21,36 @@ struct CSVData
   std::vector<CSV_Data_Row> dataset;
 };
 
+struct CSV_Parse_Context
+{
+  std::string source;
+  uint64_t index = 0;
+
+  CSV_Parse_Context(std::string source)
+  {
+    this->source = source;
+    this->index = 0;
+  }
+
+  int32_t peek_char()
+  {
+    if (this->is_finished()) return -9999;
+
+    return static_cast<int32_t>(this->source[this->index++]);
+  }
+
+  int32_t eat_char()
+  {
+    if (this->is_finished()) return -9999;
+
+    return static_cast<int32_t>(this->source[this->index++]);
+  }
+
+  inline bool is_finished()
+  {
+    return this->index >= this->source.length();
+  }
+};
 
 /**
  * @brief função que printa os dados em formato de tabela
@@ -89,13 +119,37 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 
 }
 
+std::vector<std::string> parsing_data_cells(std::string source)
+{
+  char delimiter = ',';
+  std::vector<std::string> data;
+  CSV_Parse_Context parser(source);
+  int64_t start_current_data_cell = parser.index;
+  
+  while (!parser.is_finished())
+  {
+    int32_t character = parser.eat_char();
+
+    // @todo João, validar a função substr, validar o porque de os caracteres serem negativos...
+    // @todo João, por hora funcionou, mas falta considerar strings com aspas e remover as aspas do output
+    // @todo João, também ignorar delimitadores dentro de strings com aspas
+    // @todo João, também ignorar aspas seguidas de aspas, checar na RFC do CSV
+    if (character == delimiter || parser.is_finished())
+    {
+      std::string data_cell = parser.source.substr(start_current_data_cell, parser.index - 1);
+      data.push_back(data_cell);
+      start_current_data_cell = parser.index;
+    }
+  }
+
+  return data;
+}
+
 void add_data_row(CSV_Data_Row &row, std::string line)
 {
-  std::stringstream stream(line);
-  std::string field;
   // @todo João, aqui na verdade será necessário ajustar para parsear as linhas
   // tanto pela questão das colunas com àspas como pelos possíveis enteres dentro dessas colunas
-  while (std::getline(stream, field, ','))
+  for (const auto &field: parsing_data_cells(line))
   {
     row.push_back(field);
   }
