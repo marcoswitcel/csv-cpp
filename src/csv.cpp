@@ -58,6 +58,7 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
     }
   }
 
+  // @todo João, eventualmente printar com reticências
   field_width += 4; // padding arbitrário
 
   if (index_to_show.size() == 0) return;
