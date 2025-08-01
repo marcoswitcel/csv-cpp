@@ -21,6 +21,8 @@ struct CSVData
   std::vector<CSV_Data_Row> dataset;
 };
 
+constexpr int32_t END_OF_SOURCE = -9999;
+
 struct CSV_Parse_Context
 {
   std::string source;
@@ -34,14 +36,14 @@ struct CSV_Parse_Context
 
   int32_t peek_char()
   {
-    if (this->is_finished()) return -9999;
+    if (this->is_finished()) return END_OF_SOURCE;
 
     return static_cast<int32_t>(this->source[this->index++]);
   }
 
   int32_t eat_char()
   {
-    if (this->is_finished()) return -9999;
+    if (this->is_finished()) return END_OF_SOURCE;
 
     return static_cast<int32_t>(this->source[this->index++]);
   }
@@ -126,27 +128,48 @@ std::vector<std::string> parsing_data_cells(std::string source)
   CSV_Parse_Context parser(source);
   int64_t start_current_data_cell = parser.index;
   bool quoted = false;
+  bool openQuote = false;
   
   while (!parser.is_finished())
   {
     int32_t character = parser.eat_char();
 
     // @todo João, validar a função substr, validar o porque de os caracteres serem negativos...
-    // @todo João, por hora funcionou, mas falta considerar strings com aspas e remover as aspas do output
-    // @todo João, também ignorar delimitadores dentro de strings com aspas
     // @todo João, também ignorar aspas seguidas de aspas, checar na RFC do CSV
     // @wip vários bugs... terminar
     if (character == '"')
     {
       character = parser.eat_char();
-      quoted = !quoted;
+      if (quoted)
+      {
+        openQuote = false;
+      }
+      else
+      {
+        quoted = true;
+        openQuote = true;
+      }
     }
 
-    if (!quoted && (character == delimiter || parser.is_finished()))
+    if (!openQuote && (character == delimiter || parser.is_finished()))
     {
-      std::string data_cell = parser.source.substr(start_current_data_cell, parser.index - start_current_data_cell);
+      size_t end_index = parser.index; // remove um índice para compensar o caractere de marcação de separação
+      size_t start_index = start_current_data_cell;
+      if (!parser.is_finished())
+      {
+        end_index--;
+      }
+      if (quoted)
+      {
+        start_index++;
+        end_index--;
+      }
+      std::string data_cell = parser.source.substr(start_index, end_index - start_index);
       data.push_back(data_cell);
       start_current_data_cell = parser.index;
+      // reset quote
+      quoted = false;
+      openQuote = false;
     }
   }
 
