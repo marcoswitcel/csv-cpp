@@ -16,6 +16,7 @@ int main(int argc, const char* argv[])
     return EXIT_FAILURE;
   }
 
+  // @note João, permite filtrar apenas uma coluna por vez... pode ser melhorado no futuro.
   auto filter = get_value_for_in_argv("--filter", argc, argv);
 
   if (filter.found && !filter.value)
