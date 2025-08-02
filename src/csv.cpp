@@ -19,6 +19,10 @@ enum Data_Cell_Type
   NUMBER,
 };
 
+std::string to_string(Data_Cell_Type &type) {
+  return type == TEXT ? "TEXT" : "NUMBER";
+}
+
 struct Data_Cell_Type_Info
 {
   Data_Cell_Type type;
@@ -46,10 +50,26 @@ struct CSVData
       for (const auto &row : this->dataset)
       {
         const auto &dataField = row[i];
-        // @todo João, terminar aqui...
-
-
+        
+        if (dataField.size() == 0)
+        {
+          col_info.nullable = true;
+          continue;
+        }
+        
+        try 
+        {
+          // @note João, fica pendente implementar diferentes tipos de números.
+          // @note João, como diferenciar string vazia de null em csv? parecem ser a mesma coisa na síntaxe, 
+          // não sei se vai fazer sentido TEXT (nullable), enfim, analisar...
+          std::stod(dataField);
+        } catch (std::invalid_argument& ex)
+        {
+          col_info.type = TEXT;
+        }
       }
+
+      this->infered_types_for_columns.push_back(col_info);
     }
   }
 };
@@ -152,6 +172,18 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
     std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
   }
 
+}
+
+void print_infered_types(CSVData &csv)
+{
+  if (csv.header.size() != csv.infered_types_for_columns.size()) return;
+
+  for (size_t i = 0; i < csv.header.size(); i++)
+  {
+    std::cout << "Column name: " << csv.header[i];
+    std::cout << ", Type: " << to_string(csv.infered_types_for_columns[i].type);
+    std::cout << ", Nullable: " << csv.infered_types_for_columns[i].nullable << std::endl;
+  }
 }
 
 std::vector<std::string> parsing_data_cells(std::string source)

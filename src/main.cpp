@@ -37,7 +37,6 @@ int main(int argc, const char* argv[])
     std::cout << "Header Size: " << csv.header.size() << std::endl;
     std::cout << "Dataset Size: " << csv.dataset.size() << std::endl;
 
-
     std::vector<std::string> filters;
     if (filter.found && filter.value)
     {
@@ -45,6 +44,9 @@ int main(int argc, const char* argv[])
     }
 
     print_as_table(csv, filters);
+
+    csv.infer_types();
+    print_infered_types(csv);
     
   }
   else
