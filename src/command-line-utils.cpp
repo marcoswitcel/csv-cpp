@@ -36,11 +36,25 @@ bool is_string_present_in_argv(const char *switch_name, int argc, const char *ar
   return false;
 }
 
-std::pair<bool, const char*> get_value_for_in_argv(const char *argc_name, int argc, const char *argv[])
+struct Found_Value {
+  /**
+   * @brief indica se o 'arg_name' foi encontrado
+   * 
+   */
+  bool found;
+  /**
+   * @brief indica se tinha um tinha um cstring associada a esse 'arg_name', NULL para não encontrado
+   * e o endereço para caso tenha encontrado
+   * 
+   */
+  const char* value;
+};
+
+Found_Value get_value_for_in_argv(const char *arg_name, int argc, const char *argv[])
 {
   for (int i = 0; i < argc; i++)
   {
-    if (!strcmp(argv[i], argc_name))
+    if (!strcmp(argv[i], arg_name))
     {
       int next_index = i + 1;
       const char* value = NULL;
@@ -49,8 +63,8 @@ std::pair<bool, const char*> get_value_for_in_argv(const char *argc_name, int ar
         value = argv[next_index];
       }
 
-      return std::make_pair(true, value);
+      return { .found = true, .value = value };
     }
   }
-  return std::make_pair(false, static_cast<const char*>(NULL));
+  return { .found = false, .value = NULL };
 }

@@ -16,9 +16,9 @@ int main(int argc, const char* argv[])
     return EXIT_FAILURE;
   }
 
-  auto filter_value = get_value_for_in_argv("--filter", argc, argv);
+  auto filter = get_value_for_in_argv("--filter", argc, argv);
 
-  if (filter_value.first && !filter_value.second)
+  if (filter.found && !filter.value)
   {
     std::cout << "Filtro não especificado!" << std::endl;
     return EXIT_FAILURE;
@@ -38,7 +38,10 @@ int main(int argc, const char* argv[])
 
 
     std::vector<std::string> filters;
-    // filters.push_back("score");
+    if (filter.found && filter.value)
+    {
+      filters.push_back(filter.value);
+    }
 
     print_as_table(csv, filters);
     
