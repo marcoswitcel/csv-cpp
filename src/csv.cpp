@@ -180,7 +180,7 @@ std::vector<std::string> parsing_data_cells(std::string source)
 void add_data_row(CSV_Data_Row &row, std::string line)
 {
   // @todo João, aqui na verdade será necessário ajustar para parsear as linhas
-  // tanto pela questão das colunas com àspas como pelos possíveis enteres dentro dessas colunas
+  // tanto pela questão das colunas com àspas como pelos possíveis enter's dentro dessas colunas
   for (const auto &field: parsing_data_cells(line))
   {
     row.push_back(field);
