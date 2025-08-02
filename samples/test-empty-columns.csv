@@ -1,0 +1,5 @@
+nome,descrição,pontos
+Teste com strings vazias 1,"",""
+Teste com strings vazias 2,"",
+Teste com strings vazias 3,,
+Teste com strings vazias 4,,""

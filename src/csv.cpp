@@ -182,6 +182,13 @@ std::vector<std::string> parsing_data_cells(std::string source)
         quoted = true;
         openQuote = true;
       }
+
+      if (character == '"')
+      {
+        openQuote = false;
+        character = parser.eat_char();
+      }
+      // @todo João, problemas com strins vazias arquivo test-empty-columns.csv
     }
 
     if (!openQuote && (character == delimiter || parser.is_finished()))
@@ -198,7 +205,9 @@ std::vector<std::string> parsing_data_cells(std::string source)
         start_index++;
         end_index--;
       }
-      std::string data_cell = parser.source.substr(start_index, end_index - start_index);
+      std::string data_cell = (end_index > start_index) ?
+        parser.source.substr(start_index, end_index - start_index)
+        : "";
       data.push_back(data_cell);
       start_current_data_cell = parser.index;
       // reset quote
