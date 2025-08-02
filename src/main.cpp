@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 
+#include "./command-line-utils.cpp"
 #include "./csv.cpp"
 
 int main(int argc, const char* argv[])
@@ -12,6 +13,14 @@ int main(int argc, const char* argv[])
   if (argc < 2)
   {
     std::cout << "O arquivo não foi especificado!" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  auto filter_value = get_value_for_in_argv("--filter", argc, argv);
+
+  if (filter_value.first && !filter_value.second)
+  {
+    std::cout << "Filtro não especificado!" << std::endl;
     return EXIT_FAILURE;
   }
 
