@@ -161,6 +161,7 @@ std::vector<std::string> parsing_data_cells(std::string source)
       }
       if (quoted)
       {
+        // @todo João, dessa forma quebra com facilidade, revisar no futuro...
         start_index++;
         end_index--;
       }
