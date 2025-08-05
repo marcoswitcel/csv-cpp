@@ -227,7 +227,8 @@ std::vector<std::string> parsing_data_cells(std::string source)
     {
       size_t end_index = parser.index; // remove um índice para compensar o caractere de marcação de separação
       size_t start_index = start_current_data_cell;
-      if (!parser.is_finished())
+      // @note João, avaliar se não dá pra remover o if e deixar só o código
+      if (!parser.is_finished() || character == delimiter)
       {
         end_index--;
       }
@@ -245,6 +246,11 @@ std::vector<std::string> parsing_data_cells(std::string source)
       // reset quote
       quoted = false;
       openQuote = false;
+
+      if (character == delimiter && parser.is_finished())
+      {
+        data.push_back(""); 
+      }
     }
   }
 
