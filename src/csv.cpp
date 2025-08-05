@@ -66,6 +66,9 @@ struct CSVData
         } catch (std::invalid_argument& ex)
         {
           col_info.type = TEXT;
+        } catch (std::out_of_range& ex)
+        {
+          col_info.type = TEXT;
         }
       }
 
