@@ -38,11 +38,12 @@ void test_general_parse_success()
 
 int main()
 {
-  std::cout << "Iniciando testes" << std::endl;
+  std::cout << "Iniciando testes" << std::endl << std::endl;
 
   test_general_parse_success();
+  std::cout << "test_general_parse_success......................................OK" << std::endl;
 
-  std::cout << "Fim testes" << std::endl;
+  std::cout << std::endl << "Fim testes" << std::endl;
 
   return EXIT_SUCCESS;
 }
