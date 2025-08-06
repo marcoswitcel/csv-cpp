@@ -32,7 +32,7 @@ run: main copy-sample-data
 	@cd ./$(BUILD_FOLDER_NAME) && ./main $(RUN_ARGS)
 	@echo "\n================\n"
 
-run-tests: tests
+run-tests: tests copy-sample-data
 	@echo "cd ./$(BUILD_FOLDER_NAME)"
 	@echo ./tests
 	@echo "================"
