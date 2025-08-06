@@ -37,6 +37,8 @@ struct CSVData
   CSV_Data_Row header;
   std::vector<Data_Cell_Type_Info> infered_types_for_columns;
   std::vector<CSV_Data_Row> dataset;
+  // @todo Suportar outros delimitadores no futuro
+  char delimiter = ',';
 
   void infer_types()
   {
@@ -189,9 +191,8 @@ void print_infered_types(CSVData &csv)
   }
 }
 
-std::vector<std::string> parsing_data_cells(std::string source)
+std::vector<std::string> parsing_data_cells(std::string source, char delimiter)
 {
-  char delimiter = ',';
   std::vector<std::string> data;
   CSV_Parse_Context parser(source);
   int64_t start_current_data_cell = parser.index;
@@ -260,11 +261,11 @@ std::vector<std::string> parsing_data_cells(std::string source)
   return data;
 }
 
-void add_data_row(CSV_Data_Row &row, std::string line)
+void add_data_row(CSV_Data_Row &row, std::string line, char delimiter)
 {
   // @todo João, aqui na verdade será necessário ajustar para parsear as linhas
   // tanto pela questão das colunas com àspas como pelos possíveis enter's dentro dessas colunas
-  for (const auto &field: parsing_data_cells(line))
+  for (const auto &field: parsing_data_cells(line, delimiter))
   {
     row.push_back(field);
   }
@@ -287,12 +288,12 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
   {
     if (csv.header.size() == 0)
     {
-      add_data_row(csv.header, line);  
+      add_data_row(csv.header, line, csv.delimiter);  
     }
     else
     {
       CSV_Data_Row row;
-      add_data_row(row, line);
+      add_data_row(row, line, csv.delimiter);
 
       // @todo João, ver como vai evoluir esses warns
       if (row.size() != csv.header.size())
