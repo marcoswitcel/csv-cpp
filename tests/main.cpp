@@ -34,6 +34,8 @@ void test_general_parse_success()
 
 }
 
+// @todo João, adicionar testes com linhas e colunas vazias
+
 int main()
 {
   std::cout << "Iniciando testes" << std::endl;
