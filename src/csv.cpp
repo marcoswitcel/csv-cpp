@@ -9,6 +9,7 @@
 #include <utility>
 #include <iomanip>
 
+#include "./csv-parse-context.hpp"
 #include "./csv.hpp"
 
 void CSVData::infer_types()
@@ -48,39 +49,6 @@ void CSVData::infer_types()
     this->infered_types_for_columns.push_back(col_info);
   }
 }
-
-constexpr int32_t END_OF_SOURCE = -9999;
-
-struct CSV_Parse_Context
-{
-  std::string source;
-  uint64_t index = 0;
-
-  CSV_Parse_Context(std::string source)
-  {
-    this->source = source;
-    this->index = 0;
-  }
-
-  int32_t peek_char()
-  {
-    if (this->is_finished()) return END_OF_SOURCE;
-
-    return static_cast<int32_t>(this->source[this->index++]);
-  }
-
-  int32_t eat_char()
-  {
-    if (this->is_finished()) return END_OF_SOURCE;
-
-    return static_cast<int32_t>(this->source[this->index++]);
-  }
-
-  inline bool is_finished()
-  {
-    return this->index >= this->source.length();
-  }
-};
 
 /**
  * @brief função que printa os dados em formato de tabela
