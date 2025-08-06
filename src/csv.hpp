@@ -40,41 +40,9 @@ struct CSVData
   // @todo Suportar outros delimitadores no futuro
   char delimiter = ',';
 
-  void infer_types()
-  {
-    if (!this->header.size()) return;
-    if (!this->dataset.size()) return;
-
-    for (size_t i = 0; i < this->header.size(); i++)
-    {
-      Data_Cell_Type_Info col_info = { .type = NUMBER, .nullable = false, };
-
-      for (const auto &row : this->dataset)
-      {
-        const auto &dataField = row[i];
-        
-        if (dataField.size() == 0)
-        {
-          col_info.nullable = true;
-          continue;
-        }
-        
-        try 
-        {
-          // @note João, fica pendente implementar diferentes tipos de números.
-          // @note João, como diferenciar string vazia de null em csv? parecem ser a mesma coisa na síntaxe, 
-          // não sei se vai fazer sentido TEXT (nullable), enfim, analisar...
-          std::stod(dataField);
-        } catch (std::invalid_argument& ex)
-        {
-          col_info.type = TEXT;
-        } catch (std::out_of_range& ex)
-        {
-          col_info.type = TEXT;
-        }
-      }
-
-      this->infered_types_for_columns.push_back(col_info);
-    }
-  }
+  /**
+   * @brief infere os tipos de dados para as colunas
+   * 
+   */
+  void infer_types();
 };
