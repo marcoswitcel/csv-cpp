@@ -24,6 +24,7 @@ void CSVData::infer_types()
   for (size_t i = 0; i < this->header.size(); i++)
   {
     Data_Cell_Type_Info col_info = { .type = NUMBER, .nullable = false, };
+    bool all_columns_null = true;
 
     for (const auto &row : this->dataset)
     {
@@ -34,6 +35,8 @@ void CSVData::infer_types()
         col_info.nullable = true;
         continue;
       }
+
+      all_columns_null = false;
       
       try 
       {
@@ -48,6 +51,15 @@ void CSVData::infer_types()
       {
         col_info.type = TEXT;
       }
+    }
+
+    /**
+     * @note Se todas as colunas são nullas é melhor chutar que o campo
+     * é textual, isto já que TEXT é mais abrangente.
+     */
+    if (all_columns_null)
+    {
+      col_info.type = TEXT;
     }
 
     this->infered_types_for_columns.push_back(col_info);
