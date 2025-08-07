@@ -46,3 +46,19 @@ struct CSVData
    */
   void infer_types();
 };
+
+std::pair<bool, CSVData> parse_csv_from_file(const char* filename);
+
+/**
+ * @brief função que printa os dados em formato de tabela
+ * 
+ * @todo João, otimizar e ou escapar caracteres especiais para não quebrar o layout, bem como
+ * calcular tamanho de colunas de forma dinâmica e escrever para um arquivo ao invés do 'std::cout'
+ * 
+ * @param csv 
+ * @param filters colunas que não devem ser exibidas
+ */
+void print_as_table(CSVData &csv, std::vector<std::string> &filters);
+
+void print_infered_types(CSVData &csv);
+

@@ -50,15 +50,6 @@ void CSVData::infer_types()
   }
 }
 
-/**
- * @brief função que printa os dados em formato de tabela
- * 
- * @todo João, otimizar e ou escapar caracteres especiais para não quebrar o layout, bem como
- * calcular tamanho de colunas de forma dinâmica e escrever para um arquivo ao invés do 'std::cout'
- * 
- * @param csv 
- * @param filters colunas que não devem ser exibidas
- */
 void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 {
   std::vector<size_t> index_to_show;
@@ -129,7 +120,7 @@ void print_infered_types(CSVData &csv)
   }
 }
 
-std::vector<std::string> parsing_data_cells(std::string source, char delimiter)
+static std::vector<std::string> parsing_data_cells(std::string source, char delimiter)
 {
   std::vector<std::string> data;
   CSV_Parse_Context parser(source);
@@ -199,7 +190,7 @@ std::vector<std::string> parsing_data_cells(std::string source, char delimiter)
   return data;
 }
 
-void add_data_row(CSV_Data_Row &row, std::string line, char delimiter)
+static void add_data_row(CSV_Data_Row &row, std::string line, char delimiter)
 {
   // @todo João, aqui na verdade será necessário ajustar para parsear as linhas
   // tanto pela questão das colunas com àspas como pelos possíveis enter's dentro dessas colunas

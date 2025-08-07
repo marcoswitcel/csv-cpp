@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 
 constexpr int32_t END_OF_SOURCE = -9999;
