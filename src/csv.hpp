@@ -1,13 +1,8 @@
 #pragma once
 
-#include <assert.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vector>
 #include <string>
 #include <utility>
-#include <iomanip>
 
 // @note João, considerar usar cstrings e array estáticos para o header e as linhas
 using CSV_Data_Row = std::vector<std::string>;
