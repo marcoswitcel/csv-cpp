@@ -19,9 +19,7 @@ enum Data_Cell_Type
   NUMBER,
 };
 
-std::string to_string(Data_Cell_Type &type) {
-  return type == TEXT ? "TEXT" : "NUMBER";
-}
+std::string to_string(Data_Cell_Type &type);
 
 struct Data_Cell_Type_Info
 {

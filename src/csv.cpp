@@ -12,6 +12,10 @@
 #include "./csv-parse-context.hpp"
 #include "./csv.hpp"
 
+std::string to_string(Data_Cell_Type &type) {
+  return type == TEXT ? "TEXT" : "NUMBER";
+}
+
 void CSVData::infer_types()
 {
   if (!this->header.size()) return;
