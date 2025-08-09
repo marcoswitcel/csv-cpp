@@ -160,6 +160,7 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
       }
       else
       {
+        // @todo João, só deveria iniciar caso a áspa espetivesse no início
         quoted = true;
         openQuote = true;
       }
