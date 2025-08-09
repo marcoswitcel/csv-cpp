@@ -50,8 +50,9 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename);
  * 
  * @param csv 
  * @param filters colunas que não devem ser exibidas
+ * @param field_size_limit 
  */
-void print_as_table(CSVData &csv, std::vector<std::string> &filters);
+void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_size_limit = 30);
 
 void print_infered_types(CSVData &csv);
 

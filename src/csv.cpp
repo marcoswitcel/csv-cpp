@@ -66,7 +66,30 @@ void CSVData::infer_types()
   }
 }
 
-void print_as_table(CSVData &csv, std::vector<std::string> &filters)
+/**
+ * @brief 
+ * 
+ * @param text 
+ * @param size_limite limite positivo mínimo é de 3, por causa da ellípse, se for negativo não altera a string
+ * @return std::string 
+ */
+std::string limit_text(const std::string &text, int32_t size_limite)
+{
+  if (size_limite < 0) return text;
+
+  size_t limit = static_cast<size_t>(size_limite);
+
+  if (text.size() <= limit)
+  {
+    return text;
+  }
+
+  std::string new_string = text.substr(0, limit - 3);
+  new_string.append("...");
+  return new_string;
+}
+
+void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_size_limit)
 {
   std::vector<size_t> index_to_show;
   const auto &header = csv.header;
@@ -74,15 +97,17 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 
   for (size_t i = 0; i < header.size(); i++)
   {
-    const auto &dataField = header[i];
+    const auto dataField = limit_text(header[i], field_size_limit);
     auto it = std::find(filters.begin(), filters.end(), dataField);
     field_widths.push_back(0);
 
     if (it != filters.end()) continue;
 
     auto field_width = field_widths.at(i);
-    field_width = field_width > dataField.size() ? field_width : dataField.size();
-    field_widths.at(i) = field_width;
+    if (dataField.size() > field_width)
+    {
+      field_widths.at(i) = dataField.size();
+    }
 
     index_to_show.push_back(i);
   }
@@ -91,11 +116,26 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
   {
     for (const auto i : index_to_show)
     {
-      const auto &dataField = row[i];
+      const auto dataField = limit_text(row[i], field_size_limit);
 
       auto field_width = field_widths.at(i);
-      field_width = field_width > dataField.size() ? field_width : dataField.size();
-      field_widths.at(i) = field_width;
+      if (dataField.size() > field_width)
+      {
+        field_widths.at(i) = dataField.size();
+      }
+    }
+  }
+
+  // limitando tamanho
+  if (field_size_limit > -1)
+  {
+    for (const auto i : index_to_show)
+    {
+      auto field_width = field_widths.at(i);
+      if (field_width > static_cast<size_t>(field_size_limit))
+      {
+        field_widths.at(i) = static_cast<size_t>(field_size_limit);
+      } 
     }
   }
 
@@ -105,7 +145,8 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 
   // header
   size_t sum_of_all_widths = 0;
-  size_t field_padding = 2;
+  size_t field_padding = 1;
+
   for (auto field_width : field_widths)
   {
     sum_of_all_widths += field_width + field_padding;
@@ -115,7 +156,7 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
   std::cout << "|";
   for (const auto i : index_to_show)
   {
-    const auto &dataField = header[i];
+    const auto dataField = limit_text(header[i], field_size_limit);
     const auto field_width = field_widths.at(i) + field_padding;
     std::cout << std::left << std::setfill(' ') << std::setw(field_width) << dataField << "|";
   }
@@ -128,7 +169,7 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
     std::cout << "|";
     for (const auto i : index_to_show)
     {
-      const auto &dataField = row[i];
+      const auto dataField = limit_text(row[i], field_size_limit);
       const auto field_width = field_widths.at(i) + field_padding;
       std::cout << std::left << std::setfill(' ') << std::setw(field_width) << dataField << "|";
     }
