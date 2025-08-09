@@ -70,16 +70,19 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
 {
   std::vector<size_t> index_to_show;
   const auto &header = csv.header;
-  size_t field_width = 0;
+  std::vector<size_t> field_widths;
 
   for (size_t i = 0; i < header.size(); i++)
   {
     const auto &dataField = header[i];
     auto it = std::find(filters.begin(), filters.end(), dataField);
+    field_widths.push_back(0);
 
     if (it != filters.end()) continue;
 
+    auto field_width = field_widths.at(i);
     field_width = field_width > dataField.size() ? field_width : dataField.size();
+    field_widths.at(i) = field_width;
 
     index_to_show.push_back(i);
   }
@@ -89,25 +92,35 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
     for (const auto i : index_to_show)
     {
       const auto &dataField = row[i];
+
+      auto field_width = field_widths.at(i);
       field_width = field_width > dataField.size() ? field_width : dataField.size();
+      field_widths.at(i) = field_width;
     }
   }
 
-  // @todo João, eventualmente printar com reticências
-  field_width += 4; // padding arbitrário
+  // @todo João, eventualmente printar com reticências e limite
 
   if (index_to_show.size() == 0) return;
 
   // header
-  std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
+  size_t sum_of_all_widths = 0;
+  size_t field_padding = 2;
+  for (auto field_width : field_widths)
+  {
+    sum_of_all_widths += field_width + field_padding;
+  }
+
+  std::cout << std::setfill('-') << std::setw(sum_of_all_widths + 1 + index_to_show.size()) << "" << std::endl;
   std::cout << "|";
   for (const auto i : index_to_show)
   {
     const auto &dataField = header[i];
+    const auto field_width = field_widths.at(i) + field_padding;
     std::cout << std::left << std::setfill(' ') << std::setw(field_width) << dataField << "|";
   }
   std::cout << std::endl;
-  std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
+  std::cout << std::setfill('-') << std::setw(sum_of_all_widths + 1 + index_to_show.size()) << "" << std::endl;
 
   // data
   for (const auto &row : csv.dataset)
@@ -116,10 +129,11 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters)
     for (const auto i : index_to_show)
     {
       const auto &dataField = row[i];
+      const auto field_width = field_widths.at(i) + field_padding;
       std::cout << std::left << std::setfill(' ') << std::setw(field_width) << dataField << "|";
     }
     std::cout << std::endl;
-    std::cout << std::setfill('-') << std::setw(field_width * index_to_show.size() + 1 + index_to_show.size()) << "" << std::endl;
+    std::cout << std::setfill('-') << std::setw(sum_of_all_widths + 1 + index_to_show.size()) << "" << std::endl;
   }
 
 }
