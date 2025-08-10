@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <regex>
 #include <utility>
 #include <iomanip>
 
@@ -195,7 +196,8 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
 {
   std::vector<std::string> data;
   CSV_Parse_Context parser(source);
-  int64_t start_current_data_cell = parser.index;
+  uint64_t start_current_data_cell = parser.index;
+  std::regex double_quote_pattern("\"\"");
   bool quoted = false;
   bool openQuote = false;
   
@@ -208,24 +210,23 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
     // @wip vários bugs... terminar
     if (character == '"')
     {
-      character = parser.eat_char();
       if (quoted)
       {
-        openQuote = false;
+        if (parser.peek_char() == '"')
+        {
+          character = parser.eat_char();
+        }
+        else
+        {
+          openQuote = false;
+        }
       }
-      else
+      else if ((parser.index - 1) == start_current_data_cell)
       {
         // @todo João, só deveria iniciar caso a áspa espetivesse no início
         quoted = true;
         openQuote = true;
       }
-
-      if (character == '"')
-      {
-        openQuote = false;
-        character = parser.eat_char();
-      }
-      // @todo João, problemas com strins vazias arquivo test-empty-columns.csv
     }
 
     if (!openQuote && (character == delimiter || parser.is_finished()))
@@ -246,6 +247,11 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
       std::string data_cell = (end_index > start_index) ?
         parser.source.substr(start_index, end_index - start_index)
         : "";
+      // @note João, lento pra compilar, pode ser lento pra executar...
+      if (quoted)
+      {
+        data_cell = std::regex_replace(data_cell, double_quote_pattern, "\"");
+      }
       data.push_back(data_cell);
       start_current_data_cell = parser.index;
       // reset quote

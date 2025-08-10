@@ -21,7 +21,7 @@ struct CSV_Parse_Context
   {
     if (this->is_finished()) return END_OF_SOURCE;
 
-    return static_cast<int32_t>(this->source[this->index++]);
+    return static_cast<int32_t>(this->source[this->index]);
   }
 
   int32_t eat_char()

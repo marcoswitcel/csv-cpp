@@ -74,6 +74,43 @@ void test_general_parse_success_with_empty_columns()
 
 }
 
+void test_general_parse_success_with_quoted_columns()
+{
+  auto result = parse_csv_from_file("./samples/test-quoted-columns.csv");
+
+  assert(result.first);
+
+  auto csv = result.second;
+
+  assert(csv.header.size() == 3);
+  assert(csv.dataset.size() == 4);
+
+  assert(csv.header.at(0).compare("nome") == 0);
+  assert(csv.header.at(1).compare("descrição") == 0);
+  assert(csv.header.at(2).compare("pontos") == 0);
+
+  assert(csv.dataset.at(0).size() == 3);
+  assert(csv.dataset.at(0).at(0).compare("teste correto 01") == 0);
+  assert(csv.dataset.at(0).at(1).compare("texto \" texto") == 0);
+  assert(csv.dataset.at(0).at(2).compare("01") == 0);
+
+  assert(csv.dataset.at(1).size() == 3);
+  assert(csv.dataset.at(1).at(0).compare("teste correto 02") == 0);
+  assert(csv.dataset.at(1).at(1).compare("texto \" texto") == 0);
+  assert(csv.dataset.at(1).at(2).compare("02") == 0);
+
+  assert(csv.dataset.at(2).size() == 3);
+  assert(csv.dataset.at(2).at(0).compare("teste correto 03") == 0);
+  assert(csv.dataset.at(2).at(1).compare("texto \"\" texto") == 0);
+  assert(csv.dataset.at(2).at(2).compare("03") == 0);
+
+  assert(csv.dataset.at(3).size() == 3);
+  assert(csv.dataset.at(3).at(0).compare("teste correto 04") == 0);
+  assert(csv.dataset.at(3).at(1).compare("texto \"\" texto") == 0);
+  assert(csv.dataset.at(3).at(2).compare("04") == 0);
+
+}
+
 int main()
 {
   std::cout << "Iniciando testes" << std::endl << std::endl;
@@ -82,6 +119,8 @@ int main()
   std::cout << "test_general_parse_success......................................OK" << std::endl;
   test_general_parse_success_with_empty_columns();
   std::cout << "test_general_parse_success_with_empty_columns...................OK" << std::endl;
+  test_general_parse_success_with_quoted_columns();
+  std::cout << "test_general_parse_success_with_quoted_columns..................OK" << std::endl;
 
   std::cout << std::endl << "Fim testes" << std::endl;
 
