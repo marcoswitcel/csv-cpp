@@ -7,8 +7,6 @@
 
 int main(int argc, const char* argv[])
 {
-  std::cout << "Olá mundo do CSV!" << std::endl;
-
   // @todo João, implementar um sistema mais robusto organizado para lidar com os parâmetros
   if (argc < 2)
   {

@@ -140,8 +140,6 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_s
     }
   }
 
-  // @todo João, eventualmente printar com reticências e limite
-
   if (index_to_show.size() == 0) return;
 
   // header
@@ -205,9 +203,6 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
   {
     int32_t character = parser.eat_char();
 
-    // @todo João, validar a função substr, validar o porque de os caracteres serem negativos...
-    // @todo João, também ignorar aspas seguidas de aspas, checar na RFC do CSV
-    // @wip vários bugs... terminar
     if (character == '"')
     {
       if (quoted)
@@ -223,7 +218,6 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
       }
       else if ((parser.index - 1) == start_current_data_cell)
       {
-        // @todo João, só deveria iniciar caso a áspa espetivesse no início
         quoted = true;
         openQuote = true;
       }
@@ -231,19 +225,21 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
 
     if (!openQuote && (character == delimiter || parser.is_finished()))
     {
-      size_t end_index = parser.index; // remove um índice para compensar o caractere de marcação de separação
+      size_t end_index = parser.index;
       size_t start_index = start_current_data_cell;
-      // @note João, avaliar se não dá pra remover o if e deixar só o código
+      
       if (!parser.is_finished() || character == delimiter)
       {
         end_index--;
       }
+
       if (quoted)
       {
         // @todo João, dessa forma quebra com facilidade, revisar no futuro...
         start_index++;
         end_index--;
       }
+      
       std::string data_cell = (end_index > start_index) ?
         parser.source.substr(start_index, end_index - start_index)
         : "";
@@ -278,7 +274,6 @@ static void add_data_row(CSV_Data_Row &row, std::string line, char delimiter)
   }
 }
 
-// @todo João, terminar isso aqui
 std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
 {
   CSVData csv;
