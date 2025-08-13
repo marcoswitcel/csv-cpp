@@ -192,10 +192,12 @@ void print_infered_types(CSVData &csv)
 
 static std::vector<std::string> parsing_data_cells(std::string source, char delimiter)
 {
+  static std::regex double_quote_pattern("\"\"");
+
   std::vector<std::string> data;
+  
   CSV_Parse_Context parser(source);
   uint64_t start_current_data_cell = parser.index;
-  std::regex double_quote_pattern("\"\"");
   bool quoted = false;
   bool openQuote = false;
   
