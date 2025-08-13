@@ -14,6 +14,7 @@ int main(int argc, const char* argv[])
     return EXIT_FAILURE;
   }
 
+  bool is_verbose = is_string_present_in_argv("--verbose", argc, argv);
   // @note João, permite filtrar apenas uma coluna por vez... pode ser melhorado no futuro.
   auto filter = get_value_for_in_argv("--filter", argc, argv);
 
@@ -25,15 +26,19 @@ int main(int argc, const char* argv[])
 
   std::string filename = std::string(argv[1]);
 
-  std::cout << "Filename: " << filename << std::endl;
+  if (is_verbose) std::cout << "Filename: " << filename << std::endl;
+
   auto result = parse_csv_from_file(filename.c_str());
 
   if (result.first)
   {
     auto csv = result.second;
-    std::cout << "Success!" << std::endl;
-    std::cout << "Header Size: " << csv.header.size() << std::endl;
-    std::cout << "Dataset Size: " << csv.dataset.size() << std::endl;
+    if (is_verbose)
+    {
+      std::cout << "Success!" << std::endl;
+      std::cout << "Header Size: " << csv.header.size() << std::endl;
+      std::cout << "Dataset Size: " << csv.dataset.size() << std::endl;
+    }
 
     std::vector<std::string> filters;
     if (filter.found && filter.value)
@@ -49,7 +54,7 @@ int main(int argc, const char* argv[])
   }
   else
   {
-    std::cout << "Fail!" << std::endl;
+    if (is_verbose) std::cout << "Fail!" << std::endl;
   }
   
   return EXIT_SUCCESS;
