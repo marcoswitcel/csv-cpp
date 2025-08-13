@@ -237,7 +237,8 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
       {
         // @todo João, dessa forma quebra com facilidade, revisar no futuro...
         start_index++;
-        end_index--;
+        // evitando warp-around e tentando copiar fora dos limites da string
+        if (end_index > 0) end_index--;
       }
       
       std::string data_cell = (end_index > start_index) ?
@@ -266,8 +267,6 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
 
 static void add_data_row(CSV_Data_Row &row, std::string line, char delimiter)
 {
-  // @todo João, aqui na verdade será necessário ajustar para parsear as linhas
-  // tanto pela questão das colunas com àspas como pelos possíveis enter's dentro dessas colunas
   for (const auto &field: parsing_data_cells(line, delimiter))
   {
     row.push_back(field);
@@ -286,6 +285,13 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
   }
 
   std::string line;
+  /**
+   * @note João, por hora delego para essa função o ato de quebrar o stream
+   * em linhas do arquivo, e linhas do csv de certa forma, porém eventualmente
+   * vou querer processar enter's dentro das colunas ou lidar diferente com quebras
+   * de linha no geral.
+   * @todo João, pendente lidar com enter's dentro de colunas...
+   */
   while (std::getline(file_handle, line))
   {
     if (csv.header.size() == 0)
