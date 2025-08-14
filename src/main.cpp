@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "./command-line-utils.cpp"
+#include "./utils.cpp"
 #include "./csv.cpp"
 
 int main(int argc, const char* argv[])
@@ -43,7 +44,7 @@ int main(int argc, const char* argv[])
     std::vector<std::string> filters;
     if (filter.found && filter.value)
     {
-      filters.push_back(filter.value);
+      filters = split_by(std::string(filter.value), ',');
     }
 
     print_as_table(csv, filters);
