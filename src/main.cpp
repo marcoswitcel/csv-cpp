@@ -44,6 +44,7 @@ int main(int argc, const char* argv[])
     std::vector<std::string> filters;
     if (filter.found && filter.value)
     {
+      // @note João, não suporta nomes de colunas que contenham o separador
       filters = split_by(std::string(filter.value), ',');
     }
 
