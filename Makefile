@@ -27,7 +27,7 @@ tests: build-folder-setup ./$(TESTS_FOLDER_NAME)/main.cpp
 
 run: main copy-sample-data
 	@echo "cd ./$(BUILD_FOLDER_NAME)"
-	@echo ./main
+	@echo ./main $(RUN_ARGS)
 	@echo "================"
 	@cd ./$(BUILD_FOLDER_NAME) && ./main $(RUN_ARGS)
 	@echo "\n================\n"
