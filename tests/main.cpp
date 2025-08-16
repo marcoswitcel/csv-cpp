@@ -4,6 +4,8 @@
 #include <assert.h>
 
 #include "../src/csv.cpp"
+#include "../src/utils.cpp"
+
 
 void test_general_parse_success()
 {
@@ -111,6 +113,40 @@ void test_general_parse_success_with_quoted_columns()
 
 }
 
+void test_split_by()
+{
+  {
+    const char* sample_text = "nome,idade,descrição";
+  
+    auto list = split_by(sample_text, ',');
+  
+    assert(list.size() == 3);
+    assert(list.at(0).compare("nome") == 0);
+    assert(list.at(1).compare("idade") == 0);
+    assert(list.at(2).compare("descrição") == 0);
+  }
+
+  {
+    const char* sample_text = "nome-idade-descrição";
+  
+    auto list = split_by(sample_text, '-');
+  
+    assert(list.size() == 3);
+    assert(list.at(0).compare("nome") == 0);
+    assert(list.at(1).compare("idade") == 0);
+    assert(list.at(2).compare("descrição") == 0);
+  }
+
+  {
+    const char* sample_text = "nome-idade-descrição";
+  
+    auto list = split_by(sample_text, ',');
+  
+    assert(list.size() == 1);
+    assert(list.at(0).compare("nome-idade-descrição") == 0);
+  }
+}
+
 int main()
 {
   std::cout << "Iniciando testes" << std::endl << std::endl;
@@ -121,6 +157,8 @@ int main()
   std::cout << "test_general_parse_success_with_empty_columns...................OK" << std::endl;
   test_general_parse_success_with_quoted_columns();
   std::cout << "test_general_parse_success_with_quoted_columns..................OK" << std::endl;
+  test_split_by();
+  std::cout << "test_split_by...................................................OK" << std::endl;
 
   std::cout << std::endl << "Fim testes" << std::endl;
 
