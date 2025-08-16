@@ -145,6 +145,36 @@ void test_split_by()
     assert(list.size() == 1);
     assert(list.at(0).compare("nome-idade-descrição") == 0);
   }
+
+  {
+    const char* sample_text = "nome,idade,";
+  
+    auto list = split_by(sample_text, ',');
+  
+    assert(list.size() == 3);
+    assert(list.at(0).compare("nome") == 0);
+    assert(list.at(1).compare("idade") == 0);
+    assert(list.at(2).compare("") == 0);
+  }
+
+  {
+    const char* sample_text = ",";
+  
+    auto list = split_by(sample_text, ',');
+  
+    assert(list.size() == 2);
+    assert(list.at(0).compare("") == 0);
+    assert(list.at(1).compare("") == 0);
+  }
+
+  {
+    const char* sample_text = "";
+  
+    auto list = split_by(sample_text, ',');
+  
+    assert(list.size() == 1);
+    assert(list.at(0).compare("") == 0);
+  }
 }
 
 int main()

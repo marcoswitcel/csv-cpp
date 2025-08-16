@@ -8,8 +8,8 @@
 #include "./trace.hpp"
 
 /**
- * @brief 
- * @todo João, teminar testes
+ * @brief Separa a string provida em várias partes (explode) usando o delimitador
+ * como critério de separação
  * 
  * @param value 
  * @param delimiter 
@@ -19,17 +19,19 @@ std::vector<std::string> split_by(std::string value, char delimiter)
 {
   std::vector<std::string> list;
 
-  size_t index = 0;
-  size_t start_index = 0;
-  std::cout << value << std::endl;
-  for (; index < value.length(); index++)
+  size_t scanner_index = 0;
+  size_t current_word_start_index = 0;
+  
+  for (; scanner_index < value.length(); scanner_index++)
   {
-    if (value.at(index) == delimiter || index + 1 == value.length())
+    if (value.at(scanner_index) == delimiter)
     {
-      list.push_back(value.substr(start_index, index - start_index));
-      start_index = index + 1;
+      list.push_back(value.substr(current_word_start_index, scanner_index - current_word_start_index));
+      current_word_start_index = scanner_index + 1;
     }
   }
+
+  list.push_back(value.substr(current_word_start_index, scanner_index - current_word_start_index));
 
   return list;
 }
