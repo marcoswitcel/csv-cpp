@@ -242,6 +242,14 @@ static std::vector<std::string> parsing_data_cells(std::string source, char deli
         // evitando warp-around e tentando copiar fora dos limites da string
         if (end_index > 0) end_index--;
       }
+
+      // @note João, quando refatora para lidar com caracteres terminadores de 'linha'
+      // dentro das células acredito que posso atacar o 'problema' que esse 'if' abaixo 
+      // tenta resolver...
+      if (end_index > 0 && parser.source[end_index - 1] == '\r')
+      {
+        end_index--;
+      }
       
       std::string data_cell = (end_index > start_index) ?
         parser.source.substr(start_index, end_index - start_index)
