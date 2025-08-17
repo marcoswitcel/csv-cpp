@@ -328,3 +328,100 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
   return std::make_pair(true, csv);
 }
 
+inline std::string output_data_field(std::string &data_field, char delimiter)
+{
+  static std::regex quote_pattern("\"");
+
+  const bool contains_quote = contains(data_field, '"');
+  const bool contains_delimiter = contains(data_field, delimiter);
+
+  auto prepared_data_field = data_field;
+
+  if (contains_delimiter && contains_quote)
+  {
+    prepared_data_field = std::regex_replace(prepared_data_field, quote_pattern, "\"\"");
+  }
+
+  if (contains_delimiter)
+  {
+    prepared_data_field = "\"" + prepared_data_field + "\"";
+  }
+
+  return prepared_data_field;
+}
+
+void emmit_row_data(std::ofstream &out, char delimiter, CSV_Data_Row &row)
+{
+  if (row.size() > 0)
+  {
+    auto &data_field = row[0];
+    out << output_data_field(data_field, delimiter);
+
+    for (size_t i = 1; i < row.size(); i++)
+    {
+      auto &data_field = row[i];
+
+      out << delimiter;
+      out << output_data_field(data_field, delimiter);
+    }
+  }
+
+  out << std::endl; // @todo João, checar o que a RFC fala sobre a nova linha
+}
+
+bool write_csv_to_file(CSVData &data, const char* filename)
+{
+  std::ofstream outFile;
+
+  outFile.open(filename);
+
+  if (outFile.bad()) return false;
+
+  // header
+  emmit_row_data(outFile, data.delimiter, data.header);
+
+  // dataset
+  for (auto &row : data.dataset)
+  {
+    emmit_row_data(outFile, data.delimiter, row);
+  }
+
+  outFile.close();
+  return true;
+}
+
+void emmit_sample_csv()
+{
+  CSVData csv;
+
+  csv.header.push_back("id");
+  csv.header.push_back("formato");
+  csv.header.push_back("descrição");
+
+  auto row1 = CSV_Data_Row();
+  row1.push_back("1");
+  row1.push_back("DD-mm-AAAA");
+  row1.push_back("texto simples");
+  csv.dataset.push_back(row1);
+
+  auto row2 = CSV_Data_Row();
+  row2.push_back("2");
+  row2.push_back("DD,mm,AAAA");
+  row2.push_back("texto simples com '\"' no meio");
+  csv.dataset.push_back(row2);
+
+  auto row3 = CSV_Data_Row();
+  row3.push_back("3");
+  row3.push_back("DD,mm,AAAA");
+  row3.push_back("texto simples com , no meio");
+  csv.dataset.push_back(row3);
+
+  auto row4 = CSV_Data_Row();
+  row4.push_back("4");
+  row4.push_back("DD-mm-AAAA");
+  row4.push_back("texto simples com ',' e '\"' no meio");
+  csv.dataset.push_back(row4);
+
+  write_csv_to_file(csv, "./emmited-sample.csv");
+}
+

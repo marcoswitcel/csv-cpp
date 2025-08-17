@@ -51,6 +51,8 @@ struct CSVData
  */
 std::pair<bool, CSVData> parse_csv_from_file(const char* filename);
 
+bool write_csv_to_file(CSVData &data, const char* filename);
+
 /**
  * @brief função que printa os dados em formato de tabela
  * 
@@ -73,3 +75,5 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_s
  */
 void print_infered_types(CSVData &csv);
 
+
+void emmit_sample_csv();

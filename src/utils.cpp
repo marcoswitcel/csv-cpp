@@ -35,3 +35,16 @@ std::vector<std::string> split_by(std::string value, char delimiter)
 
   return list;
 }
+
+bool contains(std::string text, char needle)
+{
+  for (size_t i = 0; i < text.length(); i++)
+  {
+    if (text.at(i) == needle)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
