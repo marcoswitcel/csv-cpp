@@ -16,6 +16,8 @@ int main(int argc, const char* argv[])
   }
 
   bool is_verbose = is_string_present_in_argv("--verbose", argc, argv);
+  bool is_infer_types = is_string_present_in_argv("--infer-types", argc, argv);
+  bool is_table_print = is_string_present_in_argv("--table-print", argc, argv);
   bool is_emmit_sample_csv = is_string_present_in_argv("--emmit-sample-csv", argc, argv);
   // @note João, permite filtrar apenas uma coluna por vez... pode ser melhorado no futuro.
   auto filter = get_value_for_in_argv("--filter", argc, argv);
@@ -49,10 +51,13 @@ int main(int argc, const char* argv[])
       filters = split_by(std::string(filter.value), ',');
     }
 
-    print_as_table(csv, filters);
+    if (is_table_print) print_as_table(csv, filters);
 
-    csv.infer_types();
-    print_infered_types(csv);
+    if (is_infer_types)
+    {
+      csv.infer_types();
+      print_infered_types(csv);
+    }
     
   }
   else
