@@ -11,6 +11,7 @@
 #include <iomanip>
 
 #include "./csv-parse-context.hpp"
+#include "./utils.cpp"
 #include "./csv.hpp"
 
 std::string to_string(Data_Cell_Type &type) {
