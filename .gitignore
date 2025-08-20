@@ -1,3 +1,6 @@
+# outros
+.vscode
+
 # build
 target/
 target/*
