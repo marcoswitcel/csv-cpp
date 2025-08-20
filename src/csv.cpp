@@ -152,6 +152,15 @@ void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_s
     sum_of_all_widths += field_width + field_padding;
   }
 
+  /**
+   * @note João, foi feita uma análise aqui, sempre que houver acentos poderá não alinhar as colunas.
+   * Isto porque o std::string armazena texto utf-8 em um formato multibyte não fixo, e não dá pra saber
+   * quandos bytes formam um caractere visual 'Unicode Unit' ou 'Graphene Cluster' (não tenho certeza se são sinônimos).
+   * A função std::stew trabalha com bytes e tamanho binário, então os bytes não visuais estão sendo contados. Poderia
+   * ser usado a função std::wcout, mas para isso teria que converter para um std::wstring antes. Também seria possível
+   * converter apenas para contar os caracteres e adicionar mais "bytes" para um determinadada linha agora sabendo que
+   * deles não ocuparação um espaço dedicado.
+   */
   std::cout << std::setfill('-') << std::setw(sum_of_all_widths + 1 + index_to_show.size()) << "" << std::endl;
   std::cout << "|";
   for (const auto i : index_to_show)
