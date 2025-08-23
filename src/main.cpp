@@ -19,6 +19,13 @@ int main(int argc, const char* argv[])
   bool is_infer_types = is_string_present_in_argv("--infer-types", argc, argv);
   bool is_table_print = is_string_present_in_argv("--table-print", argc, argv);
   bool is_emmit_sample_csv = is_string_present_in_argv("--emmit-sample-csv", argc, argv);
+
+  if (!is_verbose && !is_infer_types && !is_table_print && !is_emmit_sample_csv)
+  {
+    std::cout << "Nenhum parâmetro que gere output especificado!" << std::endl;
+    return EXIT_FAILURE;
+  }
+
   // @note João, permite filtrar apenas uma coluna por vez... pode ser melhorado no futuro.
   auto filter = get_value_for_in_argv("--filter", argc, argv);
 
