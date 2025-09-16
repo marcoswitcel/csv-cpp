@@ -75,6 +75,7 @@ int main(int argc, const char* argv[])
   if (is_emmit_sample_csv)
   {
     emmit_sample_csv();
+    if (is_verbose) std::cout << "Arquivo CSV criado: ./emmited-sample.csv" << std::endl;
   }
   
   return EXIT_SUCCESS;
