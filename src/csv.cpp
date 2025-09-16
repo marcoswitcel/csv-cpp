@@ -194,9 +194,9 @@ void print_infered_types(CSVData &csv)
 
   for (size_t i = 0; i < csv.header.size(); i++)
   {
-    std::cout << "Column name: " << csv.header[i];
+    std::cout << "Column name: '" << csv.header[i] << "'";
     std::cout << ", Type: " << to_string(csv.infered_types_for_columns[i].type);
-    std::cout << ", Nullable: " << csv.infered_types_for_columns[i].nullable << std::endl;
+    std::cout << ", Nullable: " << ((csv.infered_types_for_columns[i].nullable) ? "yes" : "no" )<< std::endl;
   }
 }
 
