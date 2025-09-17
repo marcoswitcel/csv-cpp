@@ -189,6 +189,8 @@ int main()
   std::cout << "test_general_parse_success_with_quoted_columns..................OK" << std::endl;
   test_split_by();
   std::cout << "test_split_by...................................................OK" << std::endl;
+  // @todo João, incluir um teste para o caso de ser passado um arquivo com erro.
+  // Considerar fazer um assert sobre a propriedade de erro, garantindo que ela esteja vazia nos casos de sucesso acima.
 
   std::cout << std::endl << "Fim testes" << std::endl;
 

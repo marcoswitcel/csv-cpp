@@ -18,9 +18,10 @@ int main(int argc, const char* argv[])
   bool is_verbose = is_string_present_in_argv("--verbose", argc, argv);
   bool is_infer_types = is_string_present_in_argv("--infer-types", argc, argv);
   bool is_table_print = is_string_present_in_argv("--table-print", argc, argv);
+  bool is_analyze = is_string_present_in_argv("--analyze", argc, argv);
   bool is_emmit_sample_csv = is_string_present_in_argv("--emmit-sample-csv", argc, argv);
 
-  if (!is_verbose && !is_infer_types && !is_table_print && !is_emmit_sample_csv)
+  if (!is_verbose && !is_infer_types && !is_table_print && !is_emmit_sample_csv && !is_analyze)
   {
     std::cout << "Nenhum parâmetro que gere output especificado!" << std::endl;
     return EXIT_FAILURE;
@@ -39,6 +40,7 @@ int main(int argc, const char* argv[])
 
   if (is_verbose) std::cout << "Filename: " << filename << std::endl;
 
+
   auto result = parse_csv_from_file(filename.c_str());
 
   if (result.first)
@@ -50,6 +52,24 @@ int main(int argc, const char* argv[])
       std::cout << "Header Size: " << csv.header.size() << std::endl;
       std::cout << "Dataset Size: " << csv.dataset.size() << std::endl;
     }
+
+    if (is_analyze)
+    {
+      if (csv.parsing_errors.size())
+      {
+        std::cout << "Problemas encontrados no arquivo: '" << filename << "'" << std::endl;
+        if (is_verbose)
+        for (std::string line: csv.parsing_errors)
+        {
+          std::cout << line << std::endl;
+        }
+      }
+      else
+      {
+        std::cout << "Tudo certo com o arquivo: '" << filename << "'" << std::endl;
+      }
+    }
+
 
     std::vector<std::string> filters;
     if (filter.found && filter.value)

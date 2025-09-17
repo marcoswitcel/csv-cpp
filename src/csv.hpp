@@ -37,6 +37,14 @@ struct CSVData
   std::vector<Data_Cell_Type_Info> infered_types_for_columns;
 
   /**
+   * @brief erros encontrados durante o parsing do arquivo
+   * @note João, o melhor seria uma lista de structs com uma mensagem de erro, a linha e o índice.
+   * No entando, no seu estado atual o 'parser' não provê nada disso. Então por hora apenas uma lista com a linha que gerou o erro...
+   * Precisa ser refeito @todo melhorar isso aqui @wip
+   */
+  std::vector<std::string> parsing_errors;
+
+  /**
    * @brief infere os tipos de dados para as colunas carregadas
    */
   void infer_types();

@@ -312,7 +312,8 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
    * de linha no geral.
    * @todo João, pendente lidar com enter's dentro de colunas...
    */
-  while (std::getline(file_handle, line))
+  
+  for (size_t line_number = 1; std::getline(file_handle, line); line_number++)
   {
     if (csv.header.size() == 0)
     {
@@ -328,6 +329,7 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename)
       {
         std::cout << "WARN: data_row com número de colunas incompatível com cabeçalho. colunas: "
                   << row.size() << ", linha índice: " << csv.dataset.size() << std::endl;
+        csv.parsing_errors.push_back("Linha: " + std::to_string(line_number) + ", line: " + line);
       }
       csv.dataset.push_back(row);
     }
