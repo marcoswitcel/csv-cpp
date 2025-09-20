@@ -15,7 +15,8 @@ BUILD_FOLDER_NAME=target
 #RUN_ARGS=./samples/customers-100.csv --filter "Last Name,Company,City,Country,Phone 1,Phone 2,Email,Subscription Date,Website" --table-print
 #RUN_ARGS=./samples/customers-100.csv --infer-types
 #RUN_ARGS=./samples/books.csv --emmit-sample-csv --infer-types --table-print
-RUN_ARGS=./samples/books-with-error.csv --verbose --analyze
+#RUN_ARGS=./samples/books-with-error.csv --verbose --analyze
+RUN_ARGS=./samples/imdb_top_1000.csv --filter "Released_Year,Certificate,Runtime,Genre,IMDB_Rating,Overview,Meta_score,Director,Star1,Star2,Star3,Star4,No_of_Votes,Gross" --verbose --table-print
 
 build-folder-setup:
 	@ mkdir -p $(BUILD_FOLDER_NAME)

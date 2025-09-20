@@ -61,6 +61,13 @@ std::pair<bool, CSVData> parse_csv_from_file(const char* filename);
 
 bool write_csv_to_file(CSVData &data, const char* filename);
 
+enum class Columns_Print_Mode
+{
+  All_Columns,
+  Excluded_Columns,
+  Included_And_Ordered_Columns,
+};
+
 /**
  * @brief função que printa os dados em formato de tabela
  * 
@@ -68,10 +75,11 @@ bool write_csv_to_file(CSVData &data, const char* filename);
  * calcular tamanho de colunas de forma dinâmica e escrever para um arquivo ao invés do 'std::cout'
  * 
  * @param csv 
- * @param filters colunas que não devem ser exibidas
+ * @param mode
+ * @param columsn 
  * @param field_size_limit 
  */
-void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_size_limit = 30);
+void print_as_table(CSVData &csv, Columns_Print_Mode mode = Columns_Print_Mode::All_Columns, std::vector<std::string>* columns = NULL, int field_size_limit = 30);
 
 /**
  * @brief função que printa os dados de tipos inferidos para o 'CSV'

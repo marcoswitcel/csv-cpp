@@ -78,7 +78,7 @@ int main(int argc, const char* argv[])
       filters = split_by(std::string(filter.value), ',');
     }
 
-    if (is_table_print) print_as_table(csv, filters);
+    if (is_table_print) print_as_table(csv, Columns_Print_Mode::Excluded_Columns, &filters, 30);
 
     if (is_infer_types)
     {

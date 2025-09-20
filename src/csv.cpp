@@ -89,28 +89,65 @@ static std::string limit_text(const std::string &text, int32_t size_limite)
   return new_string;
 }
 
-void print_as_table(CSVData &csv, std::vector<std::string> &filters, int field_size_limit)
+void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::string>* columns, int field_size_limit)
 {
   std::vector<size_t> index_to_show;
   const auto &header = csv.header;
   std::vector<size_t> field_widths;
 
-  for (size_t i = 0; i < header.size(); i++)
+  if (mode == Columns_Print_Mode::All_Columns)
   {
-    const auto dataField = limit_text(header[i], field_size_limit);
-    auto it = std::find(filters.begin(), filters.end(), dataField);
-    field_widths.push_back(0);
-
-    if (it != filters.end()) continue;
-
-    auto field_width = field_widths.at(i);
-    if (dataField.size() > field_width)
+    for (size_t i = 0; i < header.size(); i++)
     {
-      field_widths.at(i) = dataField.size();
+      index_to_show.push_back(i);
     }
-
-    index_to_show.push_back(i);
   }
+  else if (mode == Columns_Print_Mode::Excluded_Columns)
+  {
+    assert(columns);
+
+    for (size_t i = 0; i < header.size(); i++)
+    {
+      const auto dataField = limit_text(header[i], field_size_limit);
+      auto it = std::find(columns->begin(), columns->end(), header[i]);
+      field_widths.push_back(0);
+  
+      if (it != columns->end()) continue;
+  
+      auto field_width = field_widths.at(i);
+      if (dataField.size() > field_width)
+      {
+        field_widths.at(i) = dataField.size();
+      }
+  
+      index_to_show.push_back(i);
+    }
+  }
+  else if (mode == Columns_Print_Mode::Included_And_Ordered_Columns)
+  {
+    for (size_t i = 0; i < columns->size(); i++)
+    {
+      const auto dataField = limit_text(columns->at(i), field_size_limit);
+      auto it = std::find(columns->begin(), columns->end(), columns->at(i));
+      field_widths.push_back(0);
+  
+      if (it != columns->end()) continue;
+  
+      auto field_width = field_widths.at(i);
+      if (dataField.size() > field_width)
+      {
+        field_widths.at(i) = dataField.size();
+      }
+  
+      index_to_show.push_back(i);
+    }
+  }
+  else
+  {
+    // @todo João, ver o que fazer aqui depois
+    assert(false);
+  }
+
 
   for (const auto &row : csv.dataset)
   {
