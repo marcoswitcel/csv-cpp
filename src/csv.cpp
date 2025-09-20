@@ -127,6 +127,11 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
   }
   else if (mode == Columns_Print_Mode::Included_And_Ordered_Columns)
   {
+    for (auto header: header)
+    {
+      const auto dataField = limit_text(header, field_size_limit);
+      field_widths.push_back(dataField.size());
+    }
     for (std::string column : *columns)
     {
       auto it = std::find(header.begin(), header.end(), column);
@@ -135,7 +140,11 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
       
       size_t i = std::distance(header.begin(), it);
       const auto dataField = limit_text(header[i], field_size_limit);
-      field_widths.push_back(dataField.size());
+      auto field_width = field_widths.at(i);
+      if (dataField.size() > field_width)
+      {
+        field_widths.at(i) = dataField.size();
+      }
   
       index_to_show.push_back(i);
     }
