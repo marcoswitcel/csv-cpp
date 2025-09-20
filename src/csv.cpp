@@ -128,10 +128,10 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
     for (size_t i = 0; i < columns->size(); i++)
     {
       const auto dataField = limit_text(columns->at(i), field_size_limit);
-      auto it = std::find(columns->begin(), columns->end(), columns->at(i));
+      auto it = std::find(header.begin(), header.end(), columns->at(i));
       field_widths.push_back(0);
   
-      if (it != columns->end()) continue;
+      if (it == header.end()) continue;
   
       auto field_width = field_widths.at(i);
       if (dataField.size() > field_width)
