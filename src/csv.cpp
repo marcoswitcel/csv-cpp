@@ -100,6 +100,8 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
     for (size_t i = 0; i < header.size(); i++)
     {
       index_to_show.push_back(i);
+      const auto dataField = limit_text(header[i], field_size_limit);
+      field_widths.at(i) = dataField.size();
     }
   }
   else if (mode == Columns_Print_Mode::Excluded_Columns)
@@ -125,19 +127,15 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
   }
   else if (mode == Columns_Print_Mode::Included_And_Ordered_Columns)
   {
-    for (size_t i = 0; i < columns->size(); i++)
+    for (std::string column : *columns)
     {
-      const auto dataField = limit_text(columns->at(i), field_size_limit);
-      auto it = std::find(header.begin(), header.end(), columns->at(i));
-      field_widths.push_back(0);
-  
+      auto it = std::find(header.begin(), header.end(), column);
+      
       if (it == header.end()) continue;
-  
-      auto field_width = field_widths.at(i);
-      if (dataField.size() > field_width)
-      {
-        field_widths.at(i) = dataField.size();
-      }
+      
+      size_t i = std::distance(header.begin(), it);
+      const auto dataField = limit_text(header[i], field_size_limit);
+      field_widths.push_back(dataField.size());
   
       index_to_show.push_back(i);
     }
