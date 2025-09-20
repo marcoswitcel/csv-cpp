@@ -75,7 +75,7 @@ void CSVData::infer_types()
  * @param size_limite limite positivo mínimo é de 3, por causa da ellípse, se for negativo não altera a string
  * @return std::string 
  */
-std::string limit_text(const std::string &text, int32_t size_limite)
+static std::string limit_text(const std::string &text, int32_t size_limite)
 {
   if (size_limite < 0) return text;
 

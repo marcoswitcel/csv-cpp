@@ -11,7 +11,11 @@ SAMPLE_FOLDER_NAME=samples
 TESTS_FOLDER_NAME=tests
 BUILD_FOLDER_NAME=target
 
-RUN_ARGS=./samples/books.csv
+#RUN_ARGS=./samples/customers-100.csv --filter "Customer Id,First Name,Last Name,Company,City,Country,Phone 1,Phone 2,Email,Subscription Date"
+#RUN_ARGS=./samples/customers-100.csv --filter "Last Name,Company,City,Country,Phone 1,Phone 2,Email,Subscription Date,Website" --table-print
+#RUN_ARGS=./samples/customers-100.csv --infer-types
+#RUN_ARGS=./samples/books.csv --emmit-sample-csv --infer-types --table-print
+RUN_ARGS=./samples/books-with-error.csv --verbose --analyze
 
 build-folder-setup:
 	@ mkdir -p $(BUILD_FOLDER_NAME)

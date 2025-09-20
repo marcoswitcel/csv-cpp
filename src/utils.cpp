@@ -15,7 +15,7 @@
  * @param delimiter 
  * @return std::vector<std::string> 
  */
-std::vector<std::string> split_by(std::string value, char delimiter)
+static std::vector<std::string> split_by(std::string value, char delimiter)
 {
   std::vector<std::string> list;
 
@@ -36,7 +36,7 @@ std::vector<std::string> split_by(std::string value, char delimiter)
   return list;
 }
 
-bool contains(std::string text, char needle)
+static bool contains(std::string text, char needle)
 {
   for (size_t i = 0; i < text.length(); i++)
   {
