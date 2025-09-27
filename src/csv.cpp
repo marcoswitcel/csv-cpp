@@ -189,8 +189,9 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
   size_t sum_of_all_widths = 0;
   size_t field_padding = 1;
 
-  for (auto field_width : field_widths)
+  for (const auto i : index_to_show)
   {
+    auto field_width = field_widths.at(i);
     sum_of_all_widths += field_width + field_padding;
   }
 
