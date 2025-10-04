@@ -159,6 +159,13 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
     assert(false);
   }
 
+  assert(header.size() == field_widths.size());
+
+  for (auto i : index_to_show)
+  {
+    assert(i < header.size());
+  }
+
 
   for (const auto &row : dataset)
   {
