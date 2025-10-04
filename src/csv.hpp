@@ -82,6 +82,20 @@ enum class Columns_Print_Mode
 void print_as_table(CSVData &csv, Columns_Print_Mode mode = Columns_Print_Mode::All_Columns, std::vector<std::string>* columns = NULL, int field_size_limit = 30);
 
 /**
+ * @brief função que printa os dado de forma tabelada
+ * 
+ * @note João, considerar o que fazer nos casos aonde a linha não tiver a mesma quantidade de registros da coluna...
+ * Por hora está jogando exception's.
+ * 
+ * @param header 
+ * @param dataset 
+ * @param mode 
+ * @param columns 
+ * @param field_size_limit 
+ */
+void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Columns_Print_Mode mode, std::vector<std::string>* columns, int field_size_limit);
+
+/**
  * @brief função que printa os dados de tipos inferidos para o 'CSV'
  * 
  * @todo João, ainda falta avaliar a RFC do CSV para comparar minha

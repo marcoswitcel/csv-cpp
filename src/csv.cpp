@@ -91,8 +91,12 @@ static std::string limit_text(const std::string &text, int32_t size_limite)
 
 void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::string>* columns, int field_size_limit)
 {
+  return print_as_table(csv.header, csv.dataset, mode, columns, field_size_limit);
+}
+
+void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Columns_Print_Mode mode, std::vector<std::string>* columns, int field_size_limit)
+{
   std::vector<size_t> index_to_show;
-  const auto &header = csv.header;
   std::vector<size_t> field_widths;
 
   if (mode == Columns_Print_Mode::All_Columns)
@@ -156,7 +160,7 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
   }
 
 
-  for (const auto &row : csv.dataset)
+  for (const auto &row : dataset)
   {
     for (const auto i : index_to_show)
     {
@@ -216,7 +220,7 @@ void print_as_table(CSVData &csv, Columns_Print_Mode mode, std::vector<std::stri
   std::cout << std::setfill('-') << std::setw(sum_of_all_widths + 1 + index_to_show.size()) << "" << std::endl;
 
   // data
-  for (const auto &row : csv.dataset)
+  for (const auto &row : dataset)
   {
     std::cout << "|";
     for (const auto i : index_to_show)
