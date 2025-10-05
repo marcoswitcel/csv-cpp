@@ -105,7 +105,7 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
     {
       index_to_show.push_back(i);
       const auto dataField = limit_text(header[i], field_size_limit);
-      field_widths.at(i) = dataField.size();
+      field_widths.push_back(dataField.size());
     }
   }
   else if (mode == Columns_Print_Mode::Excluded_Columns)
