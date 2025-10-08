@@ -104,7 +104,7 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
     for (size_t i = 0; i < header.size(); i++)
     {
       index_to_show.push_back(i);
-      const auto dataField = limit_text(header[i], field_size_limit);
+      const auto dataField = header[i];
       field_widths.push_back(dataField.size());
     }
   }
@@ -114,17 +114,12 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
 
     for (size_t i = 0; i < header.size(); i++)
     {
-      const auto dataField = limit_text(header[i], field_size_limit);
       auto it = std::find(columns->begin(), columns->end(), header[i]);
       field_widths.push_back(0);
-  
+      
       if (it != columns->end()) continue;
-  
-      auto field_width = field_widths.at(i);
-      if (dataField.size() > field_width)
-      {
-        field_widths.at(i) = dataField.size();
-      }
+      
+      field_widths.at(i) = header[i].size();
   
       index_to_show.push_back(i);
     }
@@ -133,7 +128,7 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
   {
     for (auto header: header)
     {
-      const auto dataField = limit_text(header, field_size_limit);
+      const auto dataField = header;
       field_widths.push_back(dataField.size());
     }
     for (std::string column : *columns)
@@ -143,12 +138,8 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
       if (it == header.end()) continue;
       
       size_t i = std::distance(header.begin(), it);
-      const auto dataField = limit_text(header[i], field_size_limit);
-      auto field_width = field_widths.at(i);
-      if (dataField.size() > field_width)
-      {
-        field_widths.at(i) = dataField.size();
-      }
+
+      field_widths.at(i) = header[i].size();
   
       index_to_show.push_back(i);
     }
@@ -166,12 +157,12 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
     assert(i < header.size());
   }
 
-
+  // escaneando tabelas
   for (const auto &row : dataset)
   {
     for (const auto i : index_to_show)
     {
-      const auto dataField = limit_text(row[i], field_size_limit);
+      const auto dataField = row[i];
 
       auto field_width = field_widths.at(i);
       if (dataField.size() > field_width)
