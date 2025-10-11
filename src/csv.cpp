@@ -126,6 +126,7 @@ void print_as_table(CSV_Data_Row &header, std::vector<CSV_Data_Row> &dataset, Co
   }
   else if (mode == Columns_Print_Mode::Included_And_Ordered_Columns)
   {
+    assert(columns);
     for (auto header: header)
     {
       const auto dataField = header;
